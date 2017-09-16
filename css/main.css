@@ -158,8 +158,9 @@ button:focus {
 }
 #pixstar {
   position: relative;
+  text-align: left;
 }
-#pixstar-carousel-prev, #pixstar-carousel-next {
+button#pixstar-carousel-prev, button#pixstar-carousel-next {
   position: absolute;
   opacity: 0.8;
   top: 50%; 
@@ -169,21 +170,32 @@ button:focus {
   background: #fff;
   width: 34px;
   height: 34px;
-  color: #E4460C;
   box-shadow: -1px 4px 12px -2px rgba(0,0,0,0.75);
+  padding: 10px;
 }
 #pixstar-lightbox-close {
   position: absolute;
-    top: -20px;
-    right: -35px;
-    margin-top: -17px;
-    border: 1px solid #ededed;
-    border-radius: 50%;
-    background: #fff;
-    width: 35px;
-    height: 35px;
-    color: #E4460C;
-    box-shadow: -1px 4px 12px -2px rgba(0,0,0,0.75);
+  top: 2px;
+  right: -15px;
+  margin-top: -17px;
+  border: 1px solid #ededed;
+  border-radius: 50%;
+  background: #fff;
+  width: 30px;
+  height: 30px;
+  box-shadow: -1px 4px 12px -2px rgba(0,0,0,0.75);
+}
+#pixstar-lightbox-close svg {
+  margin-top: -3px;
+}
+#pixstar-lightbox-close svg path {
+  fill: #C9C9C9;
+}
+#pixstar-carousel-next svg {
+  margin: -16px 0 0 2px;
+}
+#pixstar-carousel-prev svg {
+  margin: -16px 2px 0 0;
 }
 #pixstar-carousel-prev svg path, #pixstar-carousel-next svg path {
   fill: #E4460C;
@@ -195,16 +207,15 @@ button:focus {
   right: 2%;
 }
 .pixstar-slide {
-  margin: 6px;
   border-radius: 3px;
   display: relative; /*inline-block*/
-  background: -moz-linear-gradient(top, rgba(255,255,255,0) 70%, rgba(31,31,31,1) 100%);
-  background: -webkit-gradient(left top, left bottom, color-stop(70%, rgba(255,255,255,0)), color-stop(100%, rgba(31,31,31,1)));
-  background: -webkit-linear-gradient(top, rgba(255,255,255,0) 70%, rgba(31,31,31,1) 100%);
-  background: -o-linear-gradient(top, rgba(255,255,255,0) 70%, rgba(31,31,31,1) 100%);
-  background: -ms-linear-gradient(top, rgba(255,255,255,0) 70%, rgba(31,31,31,1) 100%);
   background: linear-gradient(to bottom, rgba(255,255,255,0) 70%, rgba(31,31,31,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#1f1f1f', GradientType=0 );
+}
+#pixstar-carousel .pixstar-slide {
+  margin: 6px;
+}
+#pixstar-lightbox .pixstar-slide {
+  margin-top: 6px;
 }
 .pixstar-slide > img {
   position: relative;
@@ -219,7 +230,6 @@ button:focus {
   font-size: 12px;
   line-height: 42px;
   margin: -42px 0 0 6px;
-  text-align: left;
 }
 .pixstar-credit > img {
   border: 1px solid #5F5F5F;
@@ -233,17 +243,38 @@ button:focus {
   font-size: 11px;
   color: #535353;
 }
+#pixstar-lightbox #pixstar-brand {
+  position: absolute;
+  color: #efefef;
+  bottom: 0;
+  bottom: -26px;
+  right: 0;
+}
 #pixstar-brand img {
   width: 16px;
   margin-top: -2px;
 }
-
 .swal-modal {
   width: 90%;
 }
-
+.swal-content {
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+.swal-content:last-child {
+  margin: 0;
+}
 #pixstar #pixstar-lightbox {
   display: none; /* hide from the document */
+}
+#pixstar-info {
+  font-weight: 100;  
+  font-size: 14px;
+}
+#pixstar-info h1 {
+  font-weight: 100;
+  margin: 0;
 }
 #pixstar-lightbox {
   display: flex;
@@ -254,6 +285,13 @@ button:focus {
   min-width: 250px;
   height: 80vh;
   overflow: scroll;
+  padding: 10px;
+}
+#pixstar-lightbox-selection {
+  background: #000;
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 #pixstar-lightbox-selection img {
   width: 100%;
