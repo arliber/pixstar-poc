@@ -283,22 +283,33 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
 #pixstar-lightbox-scroll {
   width: 30%;
   min-width: 250px;
-  height: 80vh;
+  height: 86vh;
   overflow: scroll;
   padding: 10px;
 }
 #pixstar-lightbox-selection {
   background: #000;
-  width: 100%;
+  width: 70%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #pixstar-lightbox-selection img {
-  width: 100%;
+  width: 94%;
+  max-height: 94%;
 }
 
-
-
+@media only screen and (max-width: 768px) {
+  #pixstar-lightbox-selection {
+    display: none;
+  }
+  #pixstar-lightbox-scroll {
+    width: auto;
+  }
+}
 
 
 
