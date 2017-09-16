@@ -297,10 +297,14 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   justify-content: center;
   align-items: center;
 }
-#pixstar-lightbox-selection img {
+#pixstar-lightbox-selection div {
+  width: 95%;
+  height: 95%;
+}
+/* #pixstar-lightbox-selection img {
   width: 94%;
   max-height: 94%;
-}
+} */
 
 @media only screen and (max-width: 768px) {
   #pixstar-lightbox-selection {
