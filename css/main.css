@@ -153,6 +153,10 @@ nav a:hover {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+* {
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
 button:focus {
   outline:0;
 }
@@ -172,21 +176,25 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   height: 34px;
   box-shadow: -1px 4px 12px -2px rgba(0,0,0,0.75);
   padding: 10px;
+  cursor: pointer;
 }
 #pixstar-lightbox-close {
   position: absolute;
-  top: 2px;
-  right: -15px;
-  margin-top: -17px;
+  top: 12px;
+  right: -18px; 
+  margin-top: -30px;
   border: 1px solid #ededed;
   border-radius: 50%;
   background: #fff;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   box-shadow: -1px 4px 12px -2px rgba(0,0,0,0.75);
+  padding: 10px;
+  cursor: pointer;
+  z-index: 200;
 }
 #pixstar-lightbox-close svg {
-  margin-top: -3px;
+  margin-top: -15px;
 }
 #pixstar-lightbox-close svg path {
   fill: #C9C9C9;
@@ -216,6 +224,9 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
 }
 #pixstar-lightbox .pixstar-slide {
   margin-top: 6px;
+}
+.pixstar-ligtbox-selected {
+  border: 2px solid #E4460C;
 }
 .pixstar-slide > img {
   position: relative;
@@ -286,13 +297,14 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   height: 86vh;
   overflow: scroll;
   padding: 10px;
+  -webkit-overflow-scrolling: touch;
 }
 #pixstar-lightbox-selection {
   background: #000;
   width: 70%;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-
+  height: 86vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -305,6 +317,26 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   width: 94%;
   max-height: 94%;
 } */
+
+/* Tingle */
+.tingle-modal-box {
+  width: 85%;
+}
+.tingle-modal-box__content {
+  padding: 1px;
+}
+
+
+@media (max-width : 540px) {
+  .tingle-modal {
+    top: 0;
+    display: flex;
+  }
+  .tingle-modal-box {
+    width: 85%;
+    border-radius: 4px;
+  }
+}
 
 @media only screen and (max-width: 768px) {
   #pixstar-lightbox-selection {

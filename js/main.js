@@ -1,3 +1,5 @@
+/* CAROUSEL */
+
 var pixstarCarousel = new Siema({
   selector: '#pixstar-carousel',
   duration: 200,
@@ -21,19 +23,62 @@ var pixstarCarousel = new Siema({
 document.querySelector('#pixstar-carousel-prev').addEventListener('click', () => pixstarCarousel.prev());
 document.querySelector('#pixstar-carousel-next').addEventListener('click', () => pixstarCarousel.next());
 
-var allSlides = document.querySelectorAll('.pixstar-slide');
-for (var i = 0; i < allSlides.length; i++) {
-  allSlides[i].addEventListener('click', function (event) {
-    showSelection(event.target.getAttribute('data-id'), event.target.querySelector('img').getAttribute('src'))
+// Tingle
+var modal = new tingle.modal({
+  footer: false,
+  stickyFooter: false,
+  closeMethods: ['overlay', 'escape'], /*button*/
+  closeLabel: 'Close',
+  onOpen: function () {
+    toggleBodyScroll(false);
+  },
+  onClose: function () {
+    toggleBodyScroll(true);
+  }
+});
+
+var carouselSlides = document.querySelectorAll('#pixstar-carousel .pixstar-slide');
+for (var i = 0; i < carouselSlides.length; i++) {
+  carouselSlides[i].addEventListener('click', function (event) {
+    showSelection(event.target.getAttribute('id'), event.target.querySelector('img').getAttribute('src'), true)
   });
 }
 
-function toggleBodyScroll(enabled) {
-  document.body.style.overflow = enabled ? 'auto' : 'hidden';
+function getMomentId(elementId) {
+  return elementId.split('-')[3];
+}
+function openLightbox() {
+  //SweetAlert
+  //toggleBodyScroll(false);
+  // swal({
+  //   buttons: false,
+  //   closeOnClickOutside: false,
+  //   closeOnEsc: false,
+  //   content: document.querySelector('#pixstar-lightbox')
+  // })
+
+
+  // set content
+  modal.setContent(document.getElementById('pixstar-lightbox'));
+  modal.open();
+
 }
 
-function showSelection(id, src) {
+function showSelection(id, src, shouldOpenLightbox) {
   // document.querySelector('#pixstar-lightbox-selection img').setAttribute('src', src);
+
+  // Open lightbox if required
+  if (shouldOpenLightbox) {
+    openLightbox();
+  }
+
+  // Clear previuos selection
+  var currentSelection = document.querySelector('.pixstar-ligtbox-selected');
+  if (currentSelection) {
+    currentSelection.classList.remove('pixstar-ligtbox-selected');
+  }
+
+  // Show selection
   var elSelection = document.querySelector('#pixstar-lightbox-selection div');
   var backgrounds = [
     'linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0) 2%, rgba(255,255,255,0) 4%)',
@@ -45,16 +90,50 @@ function showSelection(id, src) {
   elSelection.style.backgroundSize = 'contain';
   elSelection.style.backgroundRepeat = 'no-repeat';
   elSelection.style.backgroundPosition = '50% 50%';
-  toggleBodyScroll(false);
-  swal({
-    buttons: false,
-    closeOnClickOutside: false,
-    closeOnEsc: false,
-    content: document.querySelector('#pixstar-lightbox')
-  })
+
+  // Select propert thumbnail
+  var elThumb = document.querySelector('#pixstar-moment-l-' + getMomentId(id));
+  elThumb.classList.add('pixstar-ligtbox-selected')
+
+  // Scroll to thumb
+  setTimeout(function () {
+    elThumb.scrollIntoView({
+      block: 'start',
+      inline: 'nearest',
+      behavior: 'smooth'
+    })
+  }, 100);
+
 }
+
+/* LIGHTBOX */
+
+
+function toggleBodyScroll(enabled) {
+  document.body.style.overflow = enabled ? 'auto' : 'hidden';
+  // if (enabled) {
+  //   document.body.removeEventListener('touchmove', function (e) {
+  //     e.preventDefault();
+  //   }, false);
+  // } else {
+  //   document.body.addEventListener('touchmove', function (e) {
+  //     e.preventDefault();
+  //   }, false);
+  // }  
+}
+
+
 
 document.querySelector('#pixstar-lightbox-close').addEventListener('click', function() { 
   toggleBodyScroll(true);
-  swal.close();
+  document.querySelector('.pixstar-ligtbox-selected').classList.remove('pixstar-ligtbox-selected');
+  //swal.close();
+  modal.close();
 });
+
+var lightboxSlides = document.querySelectorAll('#pixstar-lightbox .pixstar-slide');
+for (var i = 0; i < lightboxSlides.length; i++) {
+  lightboxSlides[i].addEventListener('click', function (event) {
+    showSelection(event.target.getAttribute('id'), event.target.querySelector('img').getAttribute('src'), false)
+  });
+}

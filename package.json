@@ -1,0 +1,17 @@
+{
+  "name": "sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync start -s  --files .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://LeoLiber@bitbucket.org/pixstarapp/sdk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/pixstarapp/sdk#readme"
+}
