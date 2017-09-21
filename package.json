@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "browser-sync start -s  --files .",
+    "start": "browser-sync start -s -f 'index.html' 'css' 'js'",
+    "tunnel": "./ngrok http 3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

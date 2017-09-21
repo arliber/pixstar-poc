@@ -65,17 +65,46 @@ function openLightbox() {
 }
 
 function showSelection(id, src, shouldOpenLightbox) {
-  // document.querySelector('#pixstar-lightbox-selection img').setAttribute('src', src);
-
-  // Open lightbox if required
-  if (shouldOpenLightbox) {
-    openLightbox();
-  }
-
   // Clear previuos selection
   var currentSelection = document.querySelector('.pixstar-ligtbox-selected');
   if (currentSelection) {
     currentSelection.classList.remove('pixstar-ligtbox-selected');
+  }
+
+  // Select proper thumbnail
+  var elThumb = document.querySelector('#pixstar-moment-l-' + getMomentId(id));
+  elThumb.classList.add('pixstar-ligtbox-selected');
+
+  function nthElement(elStart, ignoreSelectors, n) {
+    function matchAny(node, selectors) {
+      for (var i = 0; node && i < selectors.length; i++) {
+        if(node.getAttribute && node.getAttribute('id') === selectors[i]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    var next = elStart;
+    for(var i = 0; next && i < n; i++) {
+      do {
+        next = next.nextSibling;
+      } while ((next && next.nodeType !== 1) || matchAny(next, ignoreSelectors));
+    }
+    return next;
+  }
+
+
+  // Open lightbox if required
+  if (shouldOpenLightbox) {
+    openLightbox();
+    // Move info box(es)
+    var elInfo = document.getElementById('pixstar-info');
+    elThumb.parentNode.insertBefore(elInfo, nthElement(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 1));
+
+    // Move widgets
+    var elWidgets = document.getElementById('pixstar-info-widgets');
+    elInfo.parentNode.insertBefore(elWidgets, nthElement(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 3));
   }
 
   // Show selection
@@ -91,10 +120,6 @@ function showSelection(id, src, shouldOpenLightbox) {
   elSelection.style.backgroundRepeat = 'no-repeat';
   elSelection.style.backgroundPosition = '50% 50%';
 
-  // Select propert thumbnail
-  var elThumb = document.querySelector('#pixstar-moment-l-' + getMomentId(id));
-  elThumb.classList.add('pixstar-ligtbox-selected')
-
   // Scroll to thumb
   setTimeout(function () {
     elThumb.scrollIntoView({
@@ -106,23 +131,12 @@ function showSelection(id, src, shouldOpenLightbox) {
 
 }
 
-/* LIGHTBOX */
+/* MODAL */
 
 
 function toggleBodyScroll(enabled) {
   document.body.style.overflow = enabled ? 'auto' : 'hidden';
-  // if (enabled) {
-  //   document.body.removeEventListener('touchmove', function (e) {
-  //     e.preventDefault();
-  //   }, false);
-  // } else {
-  //   document.body.addEventListener('touchmove', function (e) {
-  //     e.preventDefault();
-  //   }, false);
-  // }  
 }
-
-
 
 document.querySelector('#pixstar-lightbox-close').addEventListener('click', function() { 
   toggleBodyScroll(true);
