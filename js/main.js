@@ -64,6 +64,48 @@ function openLightbox() {
 
 }
 
+function dynamicInfo() {
+  var img = new Image;
+  img.src = document.querySelector('#pixstar-lightbox-selection div').style.backgroundImage.match(/url\(["|']?([^"']*)["|']?\)/)[1]; // might need .replace(/["|']/g, "") too
+  var imgW = img.width;
+  var imgH = img.height;
+  
+  var cW = document.querySelector('#pixstar-lightbox-selection div').offsetWidth;
+  var cH = document.querySelector('#pixstar-lightbox-selection div').offsetHeight;
+
+  var imageRatio = imgW / imgH;
+  var cRatio = cW / cH;
+
+  var newW, newH;
+  if(imageRatio > cRatio) {
+    newW = cW;
+    newH = imgH / imgW * newW;
+  } else {
+    newH = cH;
+    newW = imgW / imgH * newH;
+  }
+
+  var info = document.getElementById('selection-info');
+  info.style.width = Math.ceil(newW) + 'px';
+  info.style.height = Math.ceil(newH) + 'px';
+}
+
+
+var addEvent = function (object, type, callback) {
+  if (object == null || typeof (object) == 'undefined') return;
+  if (object.addEventListener) {
+    object.addEventListener(type, callback, false);
+  } else if (object.attachEvent) {
+    object.attachEvent("on" + type, callback);
+  } else {
+    object["on" + type] = callback;
+  }
+};
+
+addEvent(window, "resize", function (event) {
+  dynamicInfo()
+});
+
 function showSelection(id, src, shouldOpenLightbox) {
   // Clear previuos selection
   var currentSelection = document.querySelector('.pixstar-ligtbox-selected');
@@ -110,8 +152,8 @@ function showSelection(id, src, shouldOpenLightbox) {
   // Show selection
   var elSelection = document.querySelector('#pixstar-lightbox-selection div');
   var backgrounds = [
-    'linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0) 2%, rgba(255,255,255,0) 4%)',
-    'linear-gradient(135deg, rgba(31,31,31,1) 0%, rgba(255,255,255,0) 30%)',
+    //'linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0) 2%, rgba(255,255,255,0) 4%)',
+    //'linear-gradient(135deg, rgba(31,31,31,1) 0%, rgba(31,31,31,0) 30%)',
     'url(' + src + ')',
     '#000'
   ];
@@ -119,6 +161,8 @@ function showSelection(id, src, shouldOpenLightbox) {
   elSelection.style.backgroundSize = 'contain';
   elSelection.style.backgroundRepeat = 'no-repeat';
   elSelection.style.backgroundPosition = '50% 50%';
+
+  dynamicInfo()
 
   // Scroll to thumb
   setTimeout(function () {
