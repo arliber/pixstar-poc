@@ -90,26 +90,28 @@ function adjustElementSizebyBackgroundSize(containerSelector, destinationSelecto
   // Image
   var img = new Image;
   img.src = elContainer.style.backgroundImage.match(/url\(["|']?([^"']*)["|']?\)/)[1]; // might need .replace(/["|']/g, "") too
-  var imageWidth = img.width;
-  var imageHeight = img.height;
-  
-  // Ratios
-  var imageRatio = imageWidth / imageHeight;
-  var containerRatio = containerWidth / containerHeight;
+  img.addEventListener('load', function () { 
+    var imageWidth = img.width;
+    var imageHeight = img.height;
 
-  // FInd new width/height
-  var newWidth, newHeight;
-  if(imageRatio > containerRatio) {
-    newWidth = containerWidth;
-    newHeight = imageHeight / imageWidth * newWidth;
-  } else {
-    newHeight = containerHeight;
-    newWidth = imageWidth / imageHeight * newHeight;
-  }
+    // Ratios
+    var imageRatio = imageWidth / imageHeight;
+    var containerRatio = containerWidth / containerHeight;
 
-  var elDestination = document.querySelector(destinationSelector);
-  elDestination.style.width = Math.ceil(newWidth) + 'px';
-  elDestination.style.height = Math.ceil(newHeight) + 'px';
+    // FInd new width/height
+    var newWidth, newHeight;
+    if (imageRatio > containerRatio) {
+      newWidth = containerWidth;
+      newHeight = imageHeight / imageWidth * newWidth;
+    } else {
+      newHeight = containerHeight;
+      newWidth = imageWidth / imageHeight * newHeight;
+    }
+
+    var elDestination = document.querySelector(destinationSelector);
+    elDestination.style.width = Math.ceil(newWidth) + 'px';
+    elDestination.style.height = Math.ceil(newHeight) + 'px';
+  }, false);
 }
 
 function skipElements(elStart, ignoreSelectors, count) {
