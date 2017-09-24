@@ -20,23 +20,11 @@ var pixstarCarousel = new Siema({
 
 // setInterval(function() { pixstarCarousel.next() } , 3000);
 
+// Next/Prev events
 document.querySelector('#pixstar-carousel-prev').addEventListener('click', () => pixstarCarousel.prev());
 document.querySelector('#pixstar-carousel-next').addEventListener('click', () => pixstarCarousel.next());
 
-// Tingle
-var modal = new tingle.modal({
-  footer: false,
-  stickyFooter: false,
-  closeMethods: ['overlay', 'escape'], /*button*/
-  closeLabel: 'Close',
-  onOpen: function () {
-    toggleBodyScroll(false);
-  },
-  onClose: function () {
-    toggleBodyScroll(true);
-  }
-});
-
+// Carousle slide events
 var carouselSlides = document.querySelectorAll('#pixstar-carousel .pixstar-slide');
 for (var i = 0; i < carouselSlides.length; i++) {
   carouselSlides[i].addEventListener('click', function (event) {
@@ -44,67 +32,104 @@ for (var i = 0; i < carouselSlides.length; i++) {
   });
 }
 
+/* MODAL */
+var isModalOpen = false;
+var modal = new tingle.modal({
+  footer: false,
+  stickyFooter: false,
+  closeMethods: ['overlay', 'escape'], /*button*/
+  closeLabel: 'Close', // Disabled in CSS
+  onOpen: function () {
+    toggleBodyScroll(false);
+    isModalOpen = true;
+  },
+  onClose: function () {
+    toggleBodyScroll(true);
+    isModalOpen = false;
+  }
+});
+modal.setContent(document.getElementById('pixstar-lightbox'));
+
+// Relocate selection info container on resize
+window.addEventListener('resize', function (event) {
+  if (isModalOpen) {
+    adjustElementSizebyBackgroundSize('#pixstar-lightbox-selection div', '#selection-info');
+  }
+});
+
+// Modal close event 
+document.querySelector('#pixstar-lightbox-close').addEventListener('click', function () {
+  toggleBodyScroll(true);
+  document.querySelector('.pixstar-ligtbox-selected').classList.remove('pixstar-ligtbox-selected');
+  modal.close();
+});
+
+// Modal slide events
+var lightboxSlides = document.querySelectorAll('#pixstar-lightbox .pixstar-slide');
+for (var i = 0; i < lightboxSlides.length; i++) {
+  lightboxSlides[i].addEventListener('click', function (event) {
+    showSelection(event.target.getAttribute('id'), event.target.querySelector('img').getAttribute('src'), false);
+  });
+}
+
+/* UTILS */
 function getMomentId(elementId) {
   return elementId.split('-')[3];
 }
-function openLightbox() {
-  //SweetAlert
-  //toggleBodyScroll(false);
-  // swal({
-  //   buttons: false,
-  //   closeOnClickOutside: false,
-  //   closeOnEsc: false,
-  //   content: document.querySelector('#pixstar-lightbox')
-  // })
 
-
-  // set content
-  modal.setContent(document.getElementById('pixstar-lightbox'));
-  modal.open();
-
+function toggleBodyScroll(enabled) {
+  document.body.style.overflow = enabled ? 'auto' : 'hidden';
 }
 
-function dynamicInfo() {
+function adjustElementSizebyBackgroundSize(containerSelector, destinationSelector) {
+  // Container
+  var elContainer = document.querySelector(containerSelector);
+  var containerWidth = elContainer.offsetWidth;
+  var containerHeight = elContainer.offsetHeight;
+
+  // Image
   var img = new Image;
-  img.src = document.querySelector('#pixstar-lightbox-selection div').style.backgroundImage.match(/url\(["|']?([^"']*)["|']?\)/)[1]; // might need .replace(/["|']/g, "") too
-  var imgW = img.width;
-  var imgH = img.height;
+  img.src = elContainer.style.backgroundImage.match(/url\(["|']?([^"']*)["|']?\)/)[1]; // might need .replace(/["|']/g, "") too
+  var imageWidth = img.width;
+  var imageHeight = img.height;
   
-  var cW = document.querySelector('#pixstar-lightbox-selection div').offsetWidth;
-  var cH = document.querySelector('#pixstar-lightbox-selection div').offsetHeight;
+  // Ratios
+  var imageRatio = imageWidth / imageHeight;
+  var containerRatio = containerWidth / containerHeight;
 
-  var imageRatio = imgW / imgH;
-  var cRatio = cW / cH;
-
-  var newW, newH;
-  if(imageRatio > cRatio) {
-    newW = cW;
-    newH = imgH / imgW * newW;
+  // FInd new width/height
+  var newWidth, newHeight;
+  if(imageRatio > containerRatio) {
+    newWidth = containerWidth;
+    newHeight = imageHeight / imageWidth * newWidth;
   } else {
-    newH = cH;
-    newW = imgW / imgH * newH;
+    newHeight = containerHeight;
+    newWidth = imageWidth / imageHeight * newHeight;
   }
 
-  var info = document.getElementById('selection-info');
-  info.style.width = Math.ceil(newW) + 'px';
-  info.style.height = Math.ceil(newH) + 'px';
+  var elDestination = document.querySelector(destinationSelector);
+  elDestination.style.width = Math.ceil(newWidth) + 'px';
+  elDestination.style.height = Math.ceil(newHeight) + 'px';
 }
 
-
-var addEvent = function (object, type, callback) {
-  if (object == null || typeof (object) == 'undefined') return;
-  if (object.addEventListener) {
-    object.addEventListener(type, callback, false);
-  } else if (object.attachEvent) {
-    object.attachEvent("on" + type, callback);
-  } else {
-    object["on" + type] = callback;
+function skipElements(elStart, ignoreSelectors, count) {
+  function matchAny(node, selectors) {
+    for (var i = 0; node && i < selectors.length; i++) {
+      if (node.getAttribute && node.getAttribute('id') === selectors[i]) {
+        return true;
+      }
+    }
+    return false;
   }
-};
 
-addEvent(window, "resize", function (event) {
-  dynamicInfo()
-});
+  var next = elStart;
+  for (var i = 0; next && i < count; i++) {
+    do {
+      next = next.nextSibling;
+    } while ((next && next.nodeType !== 1) || matchAny(next, ignoreSelectors));
+  }
+  return next;
+}
 
 function showSelection(id, src, shouldOpenLightbox) {
   // Clear previuos selection
@@ -117,36 +142,17 @@ function showSelection(id, src, shouldOpenLightbox) {
   var elThumb = document.querySelector('#pixstar-moment-l-' + getMomentId(id));
   elThumb.classList.add('pixstar-ligtbox-selected');
 
-  function nthElement(elStart, ignoreSelectors, n) {
-    function matchAny(node, selectors) {
-      for (var i = 0; node && i < selectors.length; i++) {
-        if(node.getAttribute && node.getAttribute('id') === selectors[i]) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    var next = elStart;
-    for(var i = 0; next && i < n; i++) {
-      do {
-        next = next.nextSibling;
-      } while ((next && next.nodeType !== 1) || matchAny(next, ignoreSelectors));
-    }
-    return next;
-  }
-
-
   // Open lightbox if required
   if (shouldOpenLightbox) {
-    openLightbox();
+    modal.open();
+
     // Move info box(es)
     var elInfo = document.getElementById('pixstar-info');
-    elThumb.parentNode.insertBefore(elInfo, nthElement(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 1));
+    elThumb.parentNode.insertBefore(elInfo, skipElements(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 1));
 
-    // Move widgets
+    // Move widget(s)
     var elWidgets = document.getElementById('pixstar-info-widgets');
-    elInfo.parentNode.insertBefore(elWidgets, nthElement(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 3));
+    elInfo.parentNode.insertBefore(elWidgets, skipElements(elThumb, ['pixstar-info', 'pixstar-info-widgets'], 3));
   }
 
   // Show selection
@@ -162,7 +168,7 @@ function showSelection(id, src, shouldOpenLightbox) {
   elSelection.style.backgroundRepeat = 'no-repeat';
   elSelection.style.backgroundPosition = '50% 50%';
 
-  dynamicInfo()
+  adjustElementSizebyBackgroundSize('#pixstar-lightbox-selection div', '#selection-info');
 
   // Scroll to thumb
   setTimeout(function () {
@@ -173,25 +179,4 @@ function showSelection(id, src, shouldOpenLightbox) {
     })
   }, 100);
 
-}
-
-/* MODAL */
-
-
-function toggleBodyScroll(enabled) {
-  document.body.style.overflow = enabled ? 'auto' : 'hidden';
-}
-
-document.querySelector('#pixstar-lightbox-close').addEventListener('click', function() { 
-  toggleBodyScroll(true);
-  document.querySelector('.pixstar-ligtbox-selected').classList.remove('pixstar-ligtbox-selected');
-  //swal.close();
-  modal.close();
-});
-
-var lightboxSlides = document.querySelectorAll('#pixstar-lightbox .pixstar-slide');
-for (var i = 0; i < lightboxSlides.length; i++) {
-  lightboxSlides[i].addEventListener('click', function (event) {
-    showSelection(event.target.getAttribute('id'), event.target.querySelector('img').getAttribute('src'), false)
-  });
 }
