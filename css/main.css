@@ -268,7 +268,7 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   color: #fff;
   font-size: 12px;
   line-height: 42px;
-  margin-left: 4px;
+  margin: 4px 6px;
 }
 .pixstar-credit-2 > img {
   border: 1px solid #5F5F5F;
@@ -309,7 +309,7 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
     display: flex;
     text-align: left;
     align-items: flex-end;
-    margin-top: 1px;
+    margin-top: 1px 1px 0 0;
 }
 #selection-info-data {
   color: #fff;
@@ -320,11 +320,13 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   list-style: none;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   padding: 0;
   font-weight: 100;
   font-size: 12px;
-  margin-top: 6px;
+  margin: 12px 0 8px 0;
+  text-align: center;
+  line-height: 14px;
 }
 #pixstar-info-widgets li {
   padding: 0;
@@ -333,10 +335,11 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 30%;
 }
 #pixstar-info-widgets li img {
-  width: 30%;
-  height: 30%;
+  width: 50%;
+  margin: 5px 0;
 }
 #pixstar #pixstar-lightbox {
   display: none; /* hide from the document */
