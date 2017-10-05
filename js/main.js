@@ -1,3 +1,106 @@
+var data = [{
+  momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196255/13_l6v97m.jpg',
+    userName: 'Nicole Mine',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198848/profiles/ben-blennerhassett-302015.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196258/12_vci9tb.jpg',
+    userName: 'Nicole Mine',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198848/profiles/ben-blennerhassett-302015.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196264/11_wmmqtx.jpg',
+    userName: 'Ken White',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198812/profiles/ryan-holloway-287655.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196249/10_wbywj3.jpg',
+    userName: 'Ken White',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198812/profiles/ryan-holloway-287655.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196232/9_tcbtik.jpg',
+    userName: 'Ken White',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198812/profiles/ryan-holloway-287655.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196253/8_ygywrv.jpg',
+    userName: 'Kim Lavander',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198723/profiles/joe-gardner-149699.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196192/7_h6sjdm.jpg',
+    userName: 'Kim Lavander',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198723/profiles/joe-gardner-149699.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196182/6_rar1ny.jpg',
+    userName: 'Kim Lavander',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198723/profiles/joe-gardner-149699.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196253/5_g2qoyp.jpg',
+    userName: 'Dan Harris',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198773/profiles/alex-boyd-260339.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196211/4_ubzbpf.jpg',
+    userName: 'Dan Harris',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198773/profiles/alex-boyd-260339.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196215/3_iuhbmd.jpg',
+    userName: 'Dan Harris',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198773/profiles/alex-boyd-260339.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196214/2_lgxh7i.jpg',
+    userName: 'Dan Harris',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198773/profiles/alex-boyd-260339.jpg'
+  },
+  {
+    momentUrl: 'https://res.cloudinary.com/pixstar/image/upload/v1507196214/1_norz8s.jpg',
+    userName: 'Nicole Mine',
+    userProfile: 'http://res.cloudinary.com/pixstar/image/upload/w_100,h_100,c_thumb,g_face/v1507198848/profiles/ben-blennerhassett-302015.jpg'
+  }
+];
+
+function createSlide(momentData, index) {
+  // Credit
+  var credit = document.createElement('div')
+  credit.classList = ['pixstar-credit'];
+  var profileImage = document.createElement('img');
+  profileImage.setAttribute('src', momentData.userProfile);
+  credit.appendChild(profileImage);
+  credit.appendChild(document.createTextNode(momentData.userName));
+
+  // Moment thumb
+  var momentThumb = document.createElement('div')
+  momentThumb.classList = ['pixstar-slide'];
+  momentThumb.setAttribute('id', 'pixstar-moment-c-' + index);
+  var thumb = document.createElement('img');
+  thumb.setAttribute('src', momentData.momentUrl.replace('upload/', 'upload/w_800,h_600,c_fill/'));
+  momentThumb.appendChild(thumb);
+  momentThumb.appendChild(credit);
+
+  // Moment
+  var moment = document.createElement('div')
+  moment.classList = ['pixstar-slide'];
+  moment.setAttribute('id', 'pixstar-moment-l-' + index);
+  var image = document.createElement('img');
+  image.setAttribute('src', momentData.momentUrl);
+  moment.appendChild(image);
+  moment.appendChild(credit.cloneNode(true));
+
+  // Add to DOM
+  document.getElementById('pixstar-carousel').appendChild(momentThumb);
+  document.getElementById('pixstar-lightbox-scroll').appendChild(moment);
+}
+
+for(var i = 0; i < data.length; i++) {
+  createSlide(data[i], i);
+}
+
 /* CAROUSEL */
 
 var pixstarCarousel = new Siema({
@@ -21,8 +124,12 @@ var pixstarCarousel = new Siema({
 // setInterval(function() { pixstarCarousel.next() } , 3000);
 
 // Next/Prev events
-document.querySelector('#pixstar-carousel-prev').addEventListener('click', () => pixstarCarousel.prev());
-document.querySelector('#pixstar-carousel-next').addEventListener('click', () => pixstarCarousel.next());
+document.querySelector('#pixstar-carousel-prev').addEventListener('click', function() {
+  pixstarCarousel.prev()
+});
+document.querySelector('#pixstar-carousel-next').addEventListener('click', function() {
+  pixstarCarousel.next()
+});
 
 // Carousle slide events
 var carouselSlides = document.querySelectorAll('#pixstar-carousel .pixstar-slide');
@@ -74,7 +181,7 @@ for (var i = 0; i < lightboxSlides.length; i++) {
 
 /* UTILS */
 function getMomentId(elementId) {
-  return elementId.split('-')[3];
+  return Number(elementId.split('-')[3]);
 }
 
 function toggleBodyScroll(enabled) {
@@ -134,6 +241,8 @@ function skipElements(elStart, ignoreSelectors, count) {
 }
 
 function showSelection(id, src, shouldOpenLightbox) {
+  var momentId = getMomentId(id);
+
   // Clear previuos selection
   var currentSelection = document.querySelector('.pixstar-ligtbox-selected');
   if (currentSelection) {
@@ -141,7 +250,7 @@ function showSelection(id, src, shouldOpenLightbox) {
   }
 
   // Select proper thumbnail
-  var elThumb = document.querySelector('#pixstar-moment-l-' + getMomentId(id));
+  var elThumb = document.querySelector('#pixstar-moment-l-' + momentId);
   elThumb.classList.add('pixstar-ligtbox-selected');
 
   // Open lightbox if required
@@ -170,6 +279,15 @@ function showSelection(id, src, shouldOpenLightbox) {
   elSelection.style.backgroundRepeat = 'no-repeat';
   elSelection.style.backgroundPosition = '50% 50%';
 
+  // Handle credit
+  var credit = document.querySelector('.pixstar-credit-2');
+  while (credit.firstChild) { // Remove all elements
+    credit.removeChild(credit.firstChild);
+  }
+  var profileImage = document.createElement('img');
+  profileImage.setAttribute('src', data[momentId].userProfile);
+  credit.appendChild(profileImage);
+  credit.appendChild(document.createTextNode(data[momentId].userName));
   adjustElementSizebyBackgroundSize('#pixstar-lightbox-selection div', '#selection-info');
 
   // Scroll to thumb
