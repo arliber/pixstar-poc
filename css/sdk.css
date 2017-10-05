@@ -125,7 +125,7 @@ button#pixstar-carousel-prev, button#pixstar-carousel-next {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-
+  vertical-align: middle;
   margin-right: 8px;
 }
 
